@@ -6,7 +6,7 @@
 
     <div class="container">
 
-     
+
 
         <form action="ajouter.php" method='post' class="w-100 mx-auto pt-5 my-3 " enctype="multipart/form-data">
 
@@ -30,54 +30,48 @@
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label">Choisissez une image</label>
-                <input id ="image" type="file" name="image">
+                <input id="image" type="file" name="image">
             </div>
-           
+
             <button type="submit" class="btn btn-primary mb-3">envoyer</button>
         </form>
 
-<table class="table table-bordered border-secondary table-striped py-5 my-5">
-<tr>
-      <th class="text-center" scope="col">Nom</th>
-      <th class="text-center" scope="col">Marque</th>
-      <th class="text-center" scope="col">Prix</th>
-      <th class="text-center" scope="col">Photo</th>
-      <th class="text-center" scope="col">Description</th>
-    </tr>
+        <table class="table table-bordered border-secondary table-striped py-5 my-5">
+            <tr>
+                <th class="text-center" scope="col">Nom</th>
+                <th class="text-center" scope="col">Marque</th>
+                <th class="text-center" scope="col">Prix</th>
+                <th class="text-center" scope="col">Photo</th>
+                <th class="text-center" scope="col">Description</th>
+                <th class="text-center" scope="col"></th>
+            </tr>
 
+            <?php
+            //ouverture de la base de donnée
+            try {
+                $bdd = new PDO('mysql:host=localhost;dbname=garage;charset=utf8', 'root', 'root');
+            } catch (Exception $e) {
+                die($e->getMessage());
+            }
 
-<?php
-//ouverture de la base de donnée
-try {
-    $bdd = new PDO('mysql:host=localhost;dbname=garage;charset=utf8', 'root', 'root');
-} catch (Exception $e) {
-    die($e->getMessage());
-}
+            $query = $bdd->query('SELECT * FROM VOITURE ORDER BY id_voiture');
+            while ($row = $query->fetch()) {
+            ?>
+                <tr class="">
+                    <td class="text-center"><?= $row['nom'] ?></td>
+                    <td class="text-center"><?= $row['marque'] ?></td>
+                    <td class="text-center"><?= $row['prix'] ?> €</td>
+                    <td class="text-center"><img src="./<?= $row['photo'] ?>" alt="photo voiture"></td>
 
-$query = $bdd->query('SELECT * FROM VOITURE ORDER BY id_voiture');
-while($row = $query->fetch()) {
-?>
-<tr>
-<td class="text-center"><?= $row['nom'] ?></td>
-<td class="text-center"><?= $row['marque'] ?></td>
-<td class="text-center"><?= $row['prix'] ?> €</td>
-<td class="text-center"><img src="./<?= $row['photo'] ?>" alt="photo voiture"></td>
-<td class="text-center"><?= $row['description'] ?></td>
+                    <!-- gestion de la logueur de la chaine -->
+                    <td class="text-center"><?= strlen($row['description']) >= 50 ? substr($row['description'], 0, 50) . "..." : $row['description']; ?></td>
+                    <td class="text-center"><a href="description.php" class="btn btn-info">en savoir plus</a></td>
+                </tr>
+            <?php
+            }
+            ?>
 
-
-</tr>
-
-
-
-    <?php
-}
-?>
-
-
-</table>
-
-
-
+        </table>
 
     </div>
     <?php include "footer.php" ?>
