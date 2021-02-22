@@ -1,11 +1,10 @@
 <?php include "head.php" ?>
 
-<body>
+<body class="map">
 
     <?php include "nav.php" ?>
 
     <div class="container">
-
 
 
         <form action="ajouter.php" method='post' class="w-100 mx-auto pt-5 my-3 " enctype="multipart/form-data">
@@ -36,7 +35,7 @@
             <button type="submit" class="btn btn-primary mb-3">envoyer</button>
         </form>
 
-        <table class="table table-bordered border-secondary table-striped py-5 my-5">
+        <table class="table table-sm border-info bg-light table-striped py-5 my-5">
             <tr>
                 <th class="text-center" scope="col">Nom</th>
                 <th class="text-center" scope="col">Marque</th>
@@ -54,24 +53,26 @@
                 die($e->getMessage());
             }
 
-            $query = $bdd->query('SELECT * FROM VOITURE ORDER BY id_voiture');
+            $query = $bdd->query('SELECT * FROM voiture ORDER BY id_voiture');
             while ($row = $query->fetch()) {
             ?>
                 <tr class="">
                     <td class="text-center"><?= $row['nom'] ?></td>
                     <td class="text-center"><?= $row['marque'] ?></td>
                     <td class="text-center"><?= $row['prix'] ?> €</td>
-                    <td class="text-center"><img src="./<?= $row['photo'] ?>" alt="photo voiture"></td>
+                    <td class="text-center"><img class="tabImg rounded shadow" src="./<?= $row['photo'] ?>" alt="photo voiture"></td>
 
                     <!-- gestion de la logueur de la chaine -->
                     <td class="text-center"><?= strlen($row['description']) >= 50 ? substr($row['description'], 0, 50) . "..." : $row['description']; ?></td>
-                    <td class="text-center"><a href="description.php" class="btn btn-info">en savoir plus</a></td>
+                    <td class="text-center"><a href="description.php?type=<?= $row['id_voiture'] ?>" class="btn btn-info">en savoir plus</a></td>
                 </tr>
             <?php
             }
             ?>
 
         </table>
+
+<hr class="p-4 m-4">
 
     </div>
     <?php include "footer.php" ?>

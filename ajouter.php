@@ -3,6 +3,7 @@ if (isset($_POST['nom']) and $_POST['nom'] != "" and isset($_POST['marque']) and
     $nom = htmlspecialchars($_POST['nom']);
     $marque = htmlspecialchars($_POST['marque']);
     $prix = htmlspecialchars($_POST['prix']);
+    $prix = intval($prix);
     $description = htmlspecialchars($_POST['description']) ?? "";
 
     if (isset($_FILES['image']) and $_FILES['image']['error'] == 0) {
@@ -37,14 +38,11 @@ if (isset($_POST['nom']) and $_POST['nom'] != "" and isset($_POST['marque']) and
     } catch (Exception $e) {
         die($e->getMessage());
     }
-
+    
     $insert = $bdd->prepare('INSERT INTO `voiture`(`nom`, `marque`, `prix`, `photo`, `description`) VALUES (?,?,?,?,?)');
 
     if ($insert->execute(array($nom, $marque, $prix, $image, $description))) {
-        echo 'Cela marche';
-    } else {
-        echo 'ERROR';
+        header('Location: index.php?success=1');
     }
 } //else header('Location: index.php?success=2');
 
-header('Location: index.php?success=1');
